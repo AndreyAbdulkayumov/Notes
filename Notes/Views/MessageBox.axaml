@@ -1,0 +1,106 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		x:Name="SourceWindow"
+        mc:Ignorable="d"  
+		d:DesignWidth="200" d:DesignHeight="150"
+        x:Class="Notes.Views.MessageBox"
+		Height="200" Width="300"
+		WindowStartupLocation="CenterOwner"
+		ShowInTaskbar="False"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaChromeHints="NoChrome"
+		ExtendClientAreaTitleBarHeightHint="40"
+		KeyDown="Window_KeyDown">
+
+	<Window.Resources>
+		<SolidColorBrush x:Key="Background_Main" Color="White"/>
+		<SolidColorBrush x:Key="Background_BottomTools" Color="#FF959595"/>
+	</Window.Resources>
+	
+	<Border Background="{StaticResource Background_Main}"
+			BorderBrush="Black"
+			BorderThickness="1">
+		
+		<Grid>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="30"/>
+				<RowDefinition Height="1*"/>
+				<RowDefinition Height="50"/>
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="0"
+				  Background="{StaticResource Background_Main}"
+				  PointerPressed="Title_PointerPressed">
+				
+				<TextBlock Text="{Binding ElementName=SourceWindow, Path=Title}"
+					       Foreground="Black"
+						   FontSize="14"
+						   Margin="10,0,0,0"
+						   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+				<Button x:Name="Button_Close"
+						Width="30" Height="30"
+						HorizontalAlignment="Right" VerticalAlignment="Stretch"
+						CornerRadius="0"
+						Padding="5"
+						BorderThickness="0"
+						Click="Button_Close_Click">
+
+					<Button.Content>
+						<Image Source="/Assets/Close.ico"/>
+					</Button.Content>
+					
+					<Button.Styles>
+						<Style Selector="Button">
+							<Setter Property="Background" Value="IndianRed" />
+						</Style>
+						<Style Selector="Button:pointerover /template/ ContentPresenter">
+							<Setter Property="Background" Value="#FFF15E5E" />
+						</Style>
+						<Style Selector="Button:pressed /template/ ContentPresenter">
+							<Setter Property="Background" Value="#FFFF4F4F" />
+						</Style>
+					</Button.Styles>
+
+				</Button>
+				
+			</Grid>
+			
+			<TextBlock x:Name="TextBlock_Message" Grid.Row="1"
+					   Foreground="Black"
+					   TextWrapping="Wrap"
+					   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+			<Border Grid.Row="2" Background="{StaticResource Background_BottomTools}"/>
+			
+			<Button x:Name="Button_OK" Grid.Row="2"
+					Content="ОК"
+					Foreground="Black"
+					Width="50" Height="30"
+					Margin="0,0,20,0"					
+					HorizontalContentAlignment="Center"
+					HorizontalAlignment="Right" VerticalAlignment="Center"
+					Click="Button_OK_Click">
+
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="Silver" />
+					</Style>
+					<Style Selector="Button:pointerover /template/ ContentPresenter">
+						<Setter Property="Background" Value="#FFC5C5C5" />
+					</Style>
+					<Style Selector="Button:pressed /template/ ContentPresenter">
+						<Setter Property="Background" Value="#FFDADADA" />
+					</Style>
+				</Button.Styles>
+
+			</Button>
+			
+		</Grid>		
+		
+	</Border>
+	
+</Window>
