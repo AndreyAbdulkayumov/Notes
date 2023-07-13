@@ -15,12 +15,25 @@
 		KeyDown="Window_KeyDown">
 
 	<Window.Resources>
+
+		<SolidColorBrush x:Key="Window_BorderBrush" Color="Black"/>
 		<SolidColorBrush x:Key="Background_Main" Color="White"/>
 		<SolidColorBrush x:Key="Background_BottomTools" Color="#FF959595"/>
+
+		<SolidColorBrush x:Key="CloseButton_Background_Default" Color="IndianRed"/>
+		<SolidColorBrush x:Key="CloseButton_Background_PointerOver" Color="#FFF15E5E"/>
+		<SolidColorBrush x:Key="CloseButton_Background_Pressed" Color="#FFFF4F4F"/>
+
+		<SolidColorBrush x:Key="OK_Button_Background_Default" Color="Silver"/>
+		<SolidColorBrush x:Key="OK_Button_Background_PointerOver" Color="#FFC5C5C5"/>
+		<SolidColorBrush x:Key="OK_Button_Background_Pressed" Color="#FFDADADA"/>
+		
+		<SolidColorBrush x:Key="Text_Color" Color="Black"/>
+		
 	</Window.Resources>
 	
 	<Border Background="{StaticResource Background_Main}"
-			BorderBrush="Black"
+			BorderBrush="{StaticResource Window_BorderBrush}"
 			BorderThickness="1">
 		
 		<Grid>
@@ -36,7 +49,7 @@
 				  PointerPressed="Title_PointerPressed">
 				
 				<TextBlock Text="{Binding ElementName=SourceWindow, Path=Title}"
-					       Foreground="Black"
+					       Foreground="{StaticResource Text_Color}"
 						   FontSize="14"
 						   Margin="10,0,0,0"
 						   HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -54,15 +67,17 @@
 					</Button.Content>
 					
 					<Button.Styles>
+						
 						<Style Selector="Button">
-							<Setter Property="Background" Value="IndianRed" />
+							<Setter Property="Background" Value="{StaticResource CloseButton_Background_Default}" />
 						</Style>
 						<Style Selector="Button:pointerover /template/ ContentPresenter">
-							<Setter Property="Background" Value="#FFF15E5E" />
+							<Setter Property="Background" Value="{StaticResource CloseButton_Background_PointerOver}" />
 						</Style>
 						<Style Selector="Button:pressed /template/ ContentPresenter">
-							<Setter Property="Background" Value="#FFFF4F4F" />
+							<Setter Property="Background" Value="{StaticResource CloseButton_Background_Pressed}" />
 						</Style>
+						
 					</Button.Styles>
 
 				</Button>
@@ -70,7 +85,7 @@
 			</Grid>
 			
 			<TextBlock x:Name="TextBlock_Message" Grid.Row="1"
-					   Foreground="Black"
+					   Foreground="{StaticResource Text_Color}"
 					   TextWrapping="Wrap"
 					   HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
@@ -78,7 +93,7 @@
 			
 			<Button x:Name="Button_OK" Grid.Row="2"
 					Content="ОК"
-					Foreground="Black"
+				    Foreground="{StaticResource Text_Color}"
 					Width="50" Height="30"
 					Margin="0,0,20,0"					
 					HorizontalContentAlignment="Center"
@@ -86,15 +101,17 @@
 					Click="Button_OK_Click">
 
 				<Button.Styles>
+					
 					<Style Selector="Button">
-						<Setter Property="Background" Value="Silver" />
+						<Setter Property="Background" Value="{StaticResource OK_Button_Background_Default}" />
 					</Style>
 					<Style Selector="Button:pointerover /template/ ContentPresenter">
-						<Setter Property="Background" Value="#FFC5C5C5" />
+						<Setter Property="Background" Value="{StaticResource OK_Button_Background_PointerOver}" />
 					</Style>
 					<Style Selector="Button:pressed /template/ ContentPresenter">
-						<Setter Property="Background" Value="#FFDADADA" />
+						<Setter Property="Background" Value="{StaticResource OK_Button_Background_Pressed}" />
 					</Style>
+					
 				</Button.Styles>
 
 			</Button>

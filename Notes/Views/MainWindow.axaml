@@ -72,6 +72,7 @@
 				</Button.Content>
 				
 				<Button.Styles>
+					
 					<Style Selector="Button">
 						<Setter Property="Background" Value="{StaticResource CloseButton_Background_Default}" />
 					</Style>
@@ -81,6 +82,7 @@
 					<Style Selector="Button:pressed /template/ ContentPresenter">
 						<Setter Property="Background" Value="{StaticResource CloseButton_Background_Pressed}" />
 					</Style>
+					
 				</Button.Styles>
 				
 			</Button>
