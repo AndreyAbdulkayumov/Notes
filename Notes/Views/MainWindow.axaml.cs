@@ -5,6 +5,8 @@ using Avalonia.Interactivity;
 using Notes.Settings;
 using System;
 using System.IO;
+using Avalonia.Platform;
+using System.Linq;
 
 namespace Notes.Views;
 
@@ -35,7 +37,7 @@ public partial class MainWindow : Window
 
             if (File.Exists(FilePath_Settings) == false)
             {
-                SettingsFile_Exists= false;
+                SettingsFile_Exists = false;
             }
 
             MainWindowState State = SettingsManager.Read(FilePath_Settings);
@@ -43,7 +45,17 @@ public partial class MainWindow : Window
             // Если файла настроек не обнаружено, то приложение откроектся в центре экрана
             if (SettingsFile_Exists)
             {
-                this.Position = new PixelPoint(State.Left, State.Top);
+                Screen LastScreen = Screens.All.Last();
+
+                double GlobalWidth = LastScreen.Bounds.BottomRight.X;
+                double GlobalHeight = LastScreen.Bounds.BottomRight.Y;
+
+                // Если сохраненная позиция окна находится вне рамок доступной рабочей области,
+                // то приложение откроется в центре главного экрана.
+                if (State.Left < GlobalWidth && State.Top < GlobalHeight)
+                {
+                    this.Position = new PixelPoint(State.Left, State.Top);
+                }                
             }
 
             this.Width = State.Width;
