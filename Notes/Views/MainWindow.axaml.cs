@@ -74,6 +74,11 @@ public partial class MainWindow : Window
 
     private void MainWindow_Closing(object sender, WindowClosingEventArgs e)
     {
+        SaveData();
+    }
+
+    private void SaveData()
+    {
         try
         {
             if (File.Exists(FilePath_SavedText) == false)
@@ -102,6 +107,11 @@ public partial class MainWindow : Window
 
             window.ShowDialog(this);
         }
+    }
+
+    public void TextBox_Text_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SaveData();
     }
 
     public void Border_Tools_PointerPressed(object sender, PointerPressedEventArgs e)

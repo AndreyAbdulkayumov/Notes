@@ -97,7 +97,8 @@
 					 SelectionBrush="{StaticResource WorkArea_SelectionBrush}"
 					 CornerRadius="0"
 					 AcceptsReturn="True" TextWrapping="Wrap"
-                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+					 LostFocus="TextBox_Text_LostFocus">
 
 				<!-- Переопредление некоторых цветов шаблона -->
 				
