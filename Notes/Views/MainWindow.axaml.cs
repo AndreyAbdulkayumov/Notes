@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using Avalonia.Platform;
 using System.Linq;
+using Notes.Views.MessageWindows;
 
 namespace Notes.Views;
 
@@ -31,7 +32,7 @@ public partial class MainWindow : Window
                 File.Create(FilePath_SavedText).Close();
             }
 
-            TextBox_Text.Text = File.ReadAllText(FilePath_SavedText);
+            //TextBox_Text.Text = File.ReadAllText(FilePath_SavedText);
 
             bool SettingsFile_Exists = true;
 
@@ -66,9 +67,7 @@ public partial class MainWindow : Window
 
         catch (Exception error)
         {
-            MessageBox window = new MessageBox("Ошибка инциализации приложения.\n\n" + error.Message, "Ошибка");
-
-            window.ShowDialog(this);
+            MessageBox.Show(this, "Ошибка инциализации приложения.\n\n" + error.Message, "Ошибка");
         }
     }
 
@@ -88,7 +87,7 @@ public partial class MainWindow : Window
 
             File.WriteAllText(FilePath_SavedText, String.Empty);
 
-            File.WriteAllText(FilePath_SavedText, TextBox_Text.Text);
+            //File.WriteAllText(FilePath_SavedText, TextBox_Text.Text);
 
             MainWindowState State = new MainWindowState()
             {
@@ -103,9 +102,7 @@ public partial class MainWindow : Window
 
         catch (Exception error)
         {
-            MessageBox window = new MessageBox("Ошибка закрытия приложения.\n\n" + error.Message, "Ошибка");
-
-            window.ShowDialog(this);
+            MessageBox.Show(this, "Ошибка закрытия приложения.\n\n" + error.Message, "Ошибка");
         }
     }
 

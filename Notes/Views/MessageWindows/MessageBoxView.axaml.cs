@@ -2,11 +2,11 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace Notes.Views
+namespace Notes.Views.MessageWindows
 {
-    public partial class MessageBox : Window
+    public partial class MessageBoxView : Window
     {
-        public MessageBox(string Message, string? Title)
+        public MessageBoxView(string Message, string? Title)
         {
             InitializeComponent();
 

@@ -8,9 +8,11 @@
         mc:Ignorable="d"
         x:Class="Notes.Views.MainWindow"
         Title="Заметки"
-		Height="250" Width="350"
+		SizeToContent="WidthAndHeight"
+		CanResize="False"
+		HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 		WindowStartupLocation="CenterScreen"
-		ShowInTaskbar="False"
+		ShowInTaskbar="True"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaChromeHints="NoChrome"
 		ExtendClientAreaTitleBarHeightHint="40"
@@ -87,32 +89,8 @@
 				
 			</Button>
 
-			<TextBox x:Name="TextBox_Text" Grid.Row="1"
-                     FontSize="16"
-                     Padding="10"
-					 Background="{StaticResource WorkArea_Background}"
-					 Foreground="{StaticResource Text_Color}"
-					 BorderBrush="{StaticResource WorkArea_BorderBrush}"
-					 CaretBrush="{StaticResource Text_Color}"
-					 SelectionBrush="{StaticResource WorkArea_SelectionBrush}"
-					 CornerRadius="0"
-					 AcceptsReturn="True" TextWrapping="Wrap"
-                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-					 LostFocus="TextBox_Text_LostFocus">
-
-				<!-- Переопредление некоторых цветов шаблона -->
-				
-				<TextBox.Resources>
-					
-					<SolidColorBrush x:Key="TextControlForegroundFocused" Color="Black"/>
-
-					<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFE4BE72"/>
-					<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFE4BE72"/>
-					
-				</TextBox.Resources>
-				
-			</TextBox>
-
+			<views:MainView  Grid.Row="1"/>
+			
 		</Grid>
 
 	</Border>

@@ -5,7 +5,7 @@
 		x:Name="SourceWindow"
         mc:Ignorable="d"  
 		d:DesignWidth="200" d:DesignHeight="150"
-        x:Class="Notes.Views.MessageBox"
+        x:Class="Notes.Views.MessageWindows.MessageBoxView"
 		Height="200" Width="300"
 		WindowStartupLocation="CenterOwner"
 		ShowInTaskbar="False"
