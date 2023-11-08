@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Notes.Settings
+namespace Notes.Models
 {
     public class MainWindowState
     {
@@ -30,9 +30,9 @@ namespace Notes.Settings
 
     internal static class SettingsManager
     {
-        public static void Save(string FilePath, MainWindowState Data)
+        public static void Save<T>(string FilePath, T Data)
         {
-            File.WriteAllText(FilePath, String.Empty);
+            File.WriteAllText(FilePath, string.Empty);
 
             JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
             {
@@ -68,10 +68,18 @@ namespace Notes.Settings
 
                 return Data;
             }
-            
+
             catch (JsonException)
             {
                 return MainWindowState.CreateDefault();
+            }
+        }
+
+        public static void Read(string FilePath, out List<BlockData_ForSave>? Data)
+        {
+            using (FileStream Stream = new FileStream(FilePath, FileMode.Open))
+            {
+                Data = JsonSerializer.Deserialize<List<BlockData_ForSave>>(Stream);
             }
         }
     }

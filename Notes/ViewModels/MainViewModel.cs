@@ -1,67 +1,127 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.Chrome;
-using Avalonia.Interactivity;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Notes.Models;
+using Notes.Views;
+using Notes.Views.MessageWindows;
 using ReactiveUI;
+using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
+using System.IO;
 
 namespace Notes.ViewModels;
 
-public class BlockData
-{
-    public string? Title { get; set; }
-    public string? Content { get; set; }
-
-    public ReactiveCommand<Unit, Unit> Command_RemoveBlock { get; }
-
-
-    public BlockData(ObservableCollection<BlockData> AllBlocks)
-    {
-        Command_RemoveBlock = ReactiveCommand.Create(() =>
-        {
-            AllBlocks.Remove(this);
-        });
-    }
-}
-
 public class MainViewModel : ViewModelBase
 {
-    private ObservableCollection<BlockData> _blocks = new ObservableCollection<BlockData>();
-
     public ObservableCollection<BlockData> Blocks
     {
-        get => _blocks;
-        set => this.RaiseAndSetIfChanged(ref _blocks, value);
+        get => Model.AllBlocks;
+        set => this.RaiseAndSetIfChanged(ref Model.AllBlocks, value);
     }
 
-    public ReactiveCommand<Unit, Unit> Command_AddBlock { get; }
+    private const string FilePath_SavedText = "SavedText.txt";
+    private const string FilePath_Settings = "Settings.json";
 
-    private int Counter = 2;
+    private MainModel Model = MainModel.Instance;
 
 
     public MainViewModel()
     {
-        Command_AddBlock = ReactiveCommand.Create(() =>
-        {
-            Counter++;
+        if (MainWindow.Instance != null)
+        {            
+            MainWindow.Instance.Opened += Instance_Opened;
+            MainWindow.Instance.Closing += Instance_Closing;
 
-            Blocks.Add(new BlockData(Blocks) 
+            MainWindow.Instance.Button_AddCommand += Instance_Button_AddCommand_Handler;
+        }
+
+
+        //Blocks.Add(new BlockData(1, Blocks)
+        //{
+        //    Title = "Title 1",
+        //    Content = "Content 1",
+        //});
+
+        //Blocks.Add(new BlockData(2, Blocks)
+        //{
+        //    Title = "Title 2",
+        //    Content = "Content 2"
+        //});
+    }
+
+
+    private void Instance_Opened(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (File.Exists(FilePath_SavedText) == false)
             {
-                Title = "Title " + Counter.ToString(),
-                Content = "Content " + Counter.ToString()
-            });
-        });
+                File.Create(FilePath_SavedText).Close();
+            }
 
-        Blocks.Add(new BlockData(Blocks)
-        {
-            Title = "Title 1",
-            Content = "Content 1",            
-        });
+            //TextBox_Text.Text = File.ReadAllText(FilePath_SavedText);
 
-        Blocks.Add(new BlockData(Blocks) 
+            bool SettingsFile_Exists = true;
+
+            if (File.Exists(FilePath_Settings) == false)
+            {
+                SettingsFile_Exists = false;
+            }
+
+            MainWindowState State = SettingsManager.Read(FilePath_Settings);
+
+            // Если файла настроек не обнаружено, то приложение откроектся в центре экрана
+            if (SettingsFile_Exists)
+            {
+                double GlobalWidth = MainWindow.Instance.LastScreen.Bounds.BottomRight.X;
+                double GlobalHeight = MainWindow.Instance.Bounds.BottomRight.Y;
+
+                // Если сохраненная позиция окна находится вне рамок доступной рабочей области,
+                // то приложение откроется в центре главного экрана.
+                if (State.Left < GlobalWidth && State.Top < GlobalHeight)
+                {
+                    MainWindow.Instance.Position = new PixelPoint(State.Left, State.Top);
+                }
+            }
+
+            Model.RestoreContent();
+        }
+
+        catch (Exception error)
         {
-            Title = "Title 2",
-            Content = "Content 2"
-        });
-    }    
+            MessageBox.Show(MainWindow.Instance, "Ошибка инциализации приложения.\n\n" + error.Message, "Ошибка");
+        }
+    }
+
+    private void Instance_Closing(object? sender, WindowClosingEventArgs e)
+    {
+        SaveData();
+    }
+
+    private void Instance_Button_AddCommand_Handler(object? sender, EventArgs e)
+    {
+        Model.AddBlock();
+    }
+
+    private void SaveData()
+    {
+        try
+        {
+            MainWindowState State = new MainWindowState()
+            {
+                Left = MainWindow.Instance.Position.X,
+                Top = MainWindow.Instance.Position.Y,
+                Height = MainWindow.Instance.Height,
+                Width = MainWindow.Instance.Width
+            };
+
+            SettingsManager.Save(FilePath_Settings, State);
+
+            Model.SaveContent();
+        }
+
+        catch (Exception error)
+        {
+            MessageBox.Show(MainWindow.Instance, "Ошибка закрытия приложения.\n\n" + error.Message, "Ошибка");
+        }
+    }
 }
