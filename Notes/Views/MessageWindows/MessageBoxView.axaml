@@ -3,12 +3,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		x:Name="SourceWindow"
-        mc:Ignorable="d"  
-		d:DesignWidth="200" d:DesignHeight="150"
+        mc:Ignorable="d"
         x:Class="Notes.Views.MessageWindows.MessageBoxView"
 		Height="200" Width="300"
-		WindowStartupLocation="CenterOwner"
+		WindowStartupLocation="CenterScreen"
 		ShowInTaskbar="False"
+		SizeToContent="WidthAndHeight"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaChromeHints="NoChrome"
 		ExtendClientAreaTitleBarHeightHint="40"
@@ -18,7 +18,7 @@
 
 		<SolidColorBrush x:Key="Window_BorderBrush" Color="Black"/>
 		<SolidColorBrush x:Key="Background_Main" Color="White"/>
-		<SolidColorBrush x:Key="Background_BottomTools" Color="#FF959595"/>
+		<SolidColorBrush x:Key="Background_BottomTools" Color="#FFB5B5B5"/>
 
 		<SolidColorBrush x:Key="CloseButton_Background_Default" Color="IndianRed"/>
 		<SolidColorBrush x:Key="CloseButton_Background_PointerOver" Color="#FFF15E5E"/>
@@ -27,6 +27,7 @@
 		<SolidColorBrush x:Key="OK_Button_Background_Default" Color="Silver"/>
 		<SolidColorBrush x:Key="OK_Button_Background_PointerOver" Color="#FFC5C5C5"/>
 		<SolidColorBrush x:Key="OK_Button_Background_Pressed" Color="#FFDADADA"/>
+		<SolidColorBrush x:Key="OK_Button_BorderBrush" Color="Black"/>
 		
 		<SolidColorBrush x:Key="Text_Color" Color="Black"/>
 		
@@ -71,9 +72,11 @@
 						<Style Selector="Button">
 							<Setter Property="Background" Value="{StaticResource CloseButton_Background_Default}" />
 						</Style>
+						
 						<Style Selector="Button:pointerover /template/ ContentPresenter">
 							<Setter Property="Background" Value="{StaticResource CloseButton_Background_PointerOver}" />
 						</Style>
+						
 						<Style Selector="Button:pressed /template/ ContentPresenter">
 							<Setter Property="Background" Value="{StaticResource CloseButton_Background_Pressed}" />
 						</Style>
@@ -87,34 +90,69 @@
 			<TextBlock x:Name="TextBlock_Message" Grid.Row="1"
 					   Foreground="{StaticResource Text_Color}"
 					   TextWrapping="Wrap"
+					   Margin="30"
 					   HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-			<Border Grid.Row="2" Background="{StaticResource Background_BottomTools}"/>
-			
-			<Button x:Name="Button_OK" Grid.Row="2"
-					Content="ОК"
-				    Foreground="{StaticResource Text_Color}"
-					Width="50" Height="30"
-					Margin="0,0,20,0"					
-					HorizontalContentAlignment="Center"
-					HorizontalAlignment="Right" VerticalAlignment="Center"
-					Click="Button_OK_Click">
+			<Border Grid.Row="2" Background="{StaticResource Background_BottomTools}">
 
-				<Button.Styles>
+				<Grid>
 					
-					<Style Selector="Button">
-						<Setter Property="Background" Value="{StaticResource OK_Button_Background_Default}" />
-					</Style>
-					<Style Selector="Button:pointerover /template/ ContentPresenter">
-						<Setter Property="Background" Value="{StaticResource OK_Button_Background_PointerOver}" />
-					</Style>
-					<Style Selector="Button:pressed /template/ ContentPresenter">
-						<Setter Property="Background" Value="{StaticResource OK_Button_Background_Pressed}" />
-					</Style>
-					
-				</Button.Styles>
+					<ItemsControl ItemsSource="{Binding Buttons}">
 
-			</Button>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Horizontal"
+											HorizontalAlignment="Right"
+											Margin="10,0,10,0"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+
+						<ItemsControl.ItemTemplate>
+
+							<DataTemplate>
+
+								<Button Content="{Binding Content}"
+										BorderThickness="1"
+										CornerRadius="0"
+										Width="70" Height="30"
+										Margin="10,0,10,0"
+										HorizontalContentAlignment="Center"
+										HorizontalAlignment="Right" VerticalAlignment="Center"
+										Click="Button_Click">
+
+									<Button.Styles>
+
+										<Style Selector="Button">
+											<Setter Property="Background" Value="{StaticResource OK_Button_Background_Default}" />
+											<Setter Property="Foreground" Value="{StaticResource Text_Color}" />
+											<Setter Property="BorderBrush" Value="{StaticResource OK_Button_BorderBrush}" />
+										</Style>
+
+										<Style Selector="Button:pointerover /template/ ContentPresenter">
+											<Setter Property="Background" Value="{StaticResource OK_Button_Background_PointerOver}" />
+											<Setter Property="Foreground" Value="{StaticResource Text_Color}" />
+											<Setter Property="BorderBrush" Value="{StaticResource OK_Button_BorderBrush}" />
+										</Style>
+
+										<Style Selector="Button:pressed /template/ ContentPresenter">
+											<Setter Property="Background" Value="{StaticResource OK_Button_Background_Pressed}" />
+											<Setter Property="Foreground" Value="{StaticResource Text_Color}" />
+											<Setter Property="BorderBrush" Value="{StaticResource OK_Button_BorderBrush}" />
+										</Style>
+
+									</Button.Styles>
+
+								</Button>
+								
+							</DataTemplate>
+							
+						</ItemsControl.ItemTemplate>
+						
+					</ItemsControl>
+					
+				</Grid>
+				
+			</Border>		
 			
 		</Grid>		
 		

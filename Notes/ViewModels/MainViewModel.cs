@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Notes.Models;
 using Notes.Views;
 using Notes.Views.MessageWindows;
@@ -7,6 +8,7 @@ using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Notes.ViewModels;
 
@@ -18,7 +20,6 @@ public class MainViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref Model.AllBlocks, value);
     }
 
-    private const string FilePath_SavedText = "SavedText.txt";
     private const string FilePath_Settings = "Settings.json";
 
     private MainModel Model = MainModel.Instance;
@@ -32,34 +33,35 @@ public class MainViewModel : ViewModelBase
             MainWindow.Instance.Closing += Instance_Closing;
 
             MainWindow.Instance.Button_AddCommand += Instance_Button_AddCommand_Handler;
+
+            Model.ViewWarningMessage = dd;
         }
 
-
-        //Blocks.Add(new BlockData(1, Blocks)
-        //{
-        //    Title = "Title 1",
-        //    Content = "Content 1",
-        //});
-
-        //Blocks.Add(new BlockData(2, Blocks)
-        //{
-        //    Title = "Title 2",
-        //    Content = "Content 2"
-        //});
+        if (MainView.Instance != null)
+        {
+            MainView.Instance.AnyTextBox_LostFocus += Instance_AnyTextBox_LostFocus;
+        }        
     }
 
+    private MessageBoxResult dd()
+    {
+        Task<MessageBoxResult> ViewMessage = Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                return MessageBox.ShowYesNo(MainWindow.Instance, "Удалить данный столбец?", "Сообщение");
+            });
 
-    private void Instance_Opened(object? sender, EventArgs e)
+        return ViewMessage.Result;
+    }
+
+    private void Instance_AnyTextBox_LostFocus(object? sender, EventArgs e)
+    {
+        SaveData();
+    }
+
+    private async void Instance_Opened(object? sender, EventArgs e)
     {
         try
         {
-            if (File.Exists(FilePath_SavedText) == false)
-            {
-                File.Create(FilePath_SavedText).Close();
-            }
-
-            //TextBox_Text.Text = File.ReadAllText(FilePath_SavedText);
-
             bool SettingsFile_Exists = true;
 
             if (File.Exists(FilePath_Settings) == false)
@@ -73,7 +75,7 @@ public class MainViewModel : ViewModelBase
             if (SettingsFile_Exists)
             {
                 double GlobalWidth = MainWindow.Instance.LastScreen.Bounds.BottomRight.X;
-                double GlobalHeight = MainWindow.Instance.Bounds.BottomRight.Y;
+                double GlobalHeight = MainWindow.Instance.LastScreen.Bounds.BottomRight.Y;
 
                 // Если сохраненная позиция окна находится вне рамок доступной рабочей области,
                 // то приложение откроется в центре главного экрана.
@@ -83,7 +85,7 @@ public class MainViewModel : ViewModelBase
                 }
             }
 
-            Model.RestoreContent();
+            Model.RestoreContent();            
         }
 
         catch (Exception error)
@@ -109,9 +111,7 @@ public class MainViewModel : ViewModelBase
             MainWindowState State = new MainWindowState()
             {
                 Left = MainWindow.Instance.Position.X,
-                Top = MainWindow.Instance.Position.Y,
-                Height = MainWindow.Instance.Height,
-                Width = MainWindow.Instance.Width
+                Top = MainWindow.Instance.Position.Y
             };
 
             SettingsManager.Save(FilePath_Settings, State);

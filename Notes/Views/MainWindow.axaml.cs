@@ -27,12 +27,6 @@ public partial class MainWindow : Window
 
         LastScreen = Screens.All.Last();
     }
-        
-
-    //public void TextBox_Text_LostFocus(object sender, RoutedEventArgs e)
-    //{
-    //    SaveData();
-    //}
 
     public void Border_Tools_PointerPressed(object sender, PointerPressedEventArgs e)
     {

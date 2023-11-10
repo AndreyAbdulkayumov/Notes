@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Notes.Views.MessageWindows;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,12 +21,17 @@ namespace Notes.Models
         public ReactiveCommand<Unit, Unit> Command_RemoveBlock { get; }
 
 
-        public BlockData(int ID, ObservableCollection<BlockData> AllBlocks)
+        public BlockData(int ID, ObservableCollection<BlockData> AllBlocks, Func<MessageBoxResult>? Message)
         {
             this.ID = ID;
 
             Command_RemoveBlock = ReactiveCommand.Create(() =>
             {
+                if (Message?.Invoke() == MessageBoxResult.No)
+                {
+                    return;
+                }
+
                 AllBlocks.Remove(this);
             });
         }
@@ -56,6 +62,8 @@ namespace Notes.Models
             }
         }
 
+        public Func<MessageBoxResult>? ViewWarningMessage { get; set; }
+
         private const string FilePath_SavedContent = "SavedContent.json";
 
         private Random RandomGenerator = new Random();
@@ -70,7 +78,7 @@ namespace Notes.Models
             }
             while (AllBlocks.Where((element) => element.ID == NewID).Count() != 0);
 
-            AllBlocks.Add(new BlockData(NewID, AllBlocks)
+            AllBlocks.Add(new BlockData(NewID, AllBlocks, ViewWarningMessage)
             {
                 Title = "Title ",
                 Content = "Content "
@@ -106,7 +114,7 @@ namespace Notes.Models
                 foreach(var element in SavedData)
                 {
                     AllBlocks.Add(
-                        new BlockData(element.ID, AllBlocks)
+                        new BlockData(element.ID, AllBlocks, ViewWarningMessage)
                         {
                             Title = element.Title,
                             Content = element.Content
