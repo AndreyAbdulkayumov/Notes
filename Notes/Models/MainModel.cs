@@ -1,12 +1,12 @@
-﻿using Notes.Views.MessageWindows;
+﻿using Notes.Views;
+using Notes.Views.MessageWindows;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.Metrics;
+using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Notes.Models
@@ -18,16 +18,18 @@ namespace Notes.Models
         public string? Title { get; set; }
         public string? Content { get; set; }
 
-        public ReactiveCommand<Unit, Unit> Command_RemoveBlock { get; }
+        public ReactiveCommand<Unit, Task> Command_RemoveBlock { get; }
 
 
-        public BlockData(int ID, ObservableCollection<BlockData> AllBlocks, Func<MessageBoxResult>? Message)
+        public BlockData(int ID, ObservableCollection<BlockData> AllBlocks)
         {
             this.ID = ID;
 
-            Command_RemoveBlock = ReactiveCommand.Create(() =>
+            Command_RemoveBlock = ReactiveCommand.Create(async () =>
             {
-                if (Message?.Invoke() == MessageBoxResult.No)
+                MessageBoxResult Result = await MessageBox.ShowYesNo(MainWindow.Instance, "Удалить данный столбец?", "Сообщение");
+
+                if (Result != MessageBoxResult.Yes)
                 {
                     return;
                 }
@@ -43,6 +45,16 @@ namespace Notes.Models
 
         public string? Title { get; set; } 
         public string? Content { get; set; }
+
+        public static BlockData_ForSave GetDefault()
+        {
+            return new BlockData_ForSave()
+            {
+                ID = 1,
+                Title = null,
+                Content = null
+            };
+        }
     }
 
     internal class MainModel
@@ -62,11 +74,25 @@ namespace Notes.Models
             }
         }
 
-        public Func<MessageBoxResult>? ViewWarningMessage { get; set; }
+        
 
-        private const string FilePath_SavedContent = "SavedContent.json";
+        private const string FileName_Settings = "Settings.json";
+        private const string FileName_SavedContent = "SavedContent.json";
+
+        private readonly string DirectoryNameInDocuments = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + "Notes";
+
+        private readonly string FilePath_Settings;
+
+        private readonly string FilePath_SavedContent;
 
         private Random RandomGenerator = new Random();
+
+
+        public MainModel()
+        {
+            FilePath_Settings = DirectoryNameInDocuments + "\\" + FileName_Settings;
+            FilePath_SavedContent = DirectoryNameInDocuments + "\\" + FileName_SavedContent;
+        }
 
         public void AddBlock()
         {
@@ -76,13 +102,35 @@ namespace Notes.Models
             {
                 NewID = RandomGenerator.Next();
             }
-            while (AllBlocks.Where((element) => element.ID == NewID).Count() != 0);
+            while (AllBlocks.Where((element) => element.ID == NewID).Count() != 0);           
 
-            AllBlocks.Add(new BlockData(NewID, AllBlocks, ViewWarningMessage)
+            AllBlocks.Add(new BlockData(NewID, AllBlocks)
             {
-                Title = "Title ",
-                Content = "Content "
+                Title = null,
+                Content = null
             });
+        }
+
+        public void CheckDirectory()
+        {
+            if (Directory.Exists(DirectoryNameInDocuments) == false)
+            {
+                Directory.CreateDirectory(DirectoryNameInDocuments);
+            }
+        }
+
+        public void SaveSettings(MainWindowState State)
+        {
+            SettingsManager.Save(FilePath_Settings, State);
+        }
+
+        public bool RestoreSettings(out MainWindowState State)
+        {
+            bool SettingsFile_Exists = File.Exists(FilePath_Settings);
+
+            State = SettingsManager.Read(FilePath_Settings);
+
+            return SettingsFile_Exists;
         }
 
         public void SaveContent()
@@ -105,6 +153,12 @@ namespace Notes.Models
 
         public void RestoreContent()
         {
+            if (File.Exists(FilePath_SavedContent) == false)
+            {
+                SettingsManager.Save(FilePath_SavedContent, 
+                    new List<BlockData_ForSave>() { BlockData_ForSave.GetDefault() });
+            }
+
             SettingsManager.Read(FilePath_SavedContent, out List<BlockData_ForSave>? SavedData);
 
             if (SavedData != null)
@@ -114,7 +168,7 @@ namespace Notes.Models
                 foreach(var element in SavedData)
                 {
                     AllBlocks.Add(
-                        new BlockData(element.ID, AllBlocks, ViewWarningMessage)
+                        new BlockData(element.ID, AllBlocks)
                         {
                             Title = element.Title,
                             Content = element.Content

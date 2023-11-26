@@ -1,14 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using Notes.Models;
 using Notes.Views;
 using Notes.Views.MessageWindows;
 using ReactiveUI;
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Notes.ViewModels;
 
@@ -18,9 +15,7 @@ public class MainViewModel : ViewModelBase
     {
         get => Model.AllBlocks;
         set => this.RaiseAndSetIfChanged(ref Model.AllBlocks, value);
-    }
-
-    private const string FilePath_Settings = "Settings.json";
+    }  
 
     private MainModel Model = MainModel.Instance;
 
@@ -33,8 +28,6 @@ public class MainViewModel : ViewModelBase
             MainWindow.Instance.Closing += Instance_Closing;
 
             MainWindow.Instance.Button_AddCommand += Instance_Button_AddCommand_Handler;
-
-            Model.ViewWarningMessage = dd;
         }
 
         if (MainView.Instance != null)
@@ -43,38 +36,28 @@ public class MainViewModel : ViewModelBase
         }        
     }
 
-    private MessageBoxResult dd()
-    {
-        Task<MessageBoxResult> ViewMessage = Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                return MessageBox.ShowYesNo(MainWindow.Instance, "Удалить данный столбец?", "Сообщение");
-            });
-
-        return ViewMessage.Result;
-    }
-
     private void Instance_AnyTextBox_LostFocus(object? sender, EventArgs e)
     {
         SaveData();
     }
 
-    private async void Instance_Opened(object? sender, EventArgs e)
+    private void Instance_Opened(object? sender, EventArgs e)
     {
         try
         {
-            bool SettingsFile_Exists = true;
+            Model.CheckDirectory();
 
-            if (File.Exists(FilePath_Settings) == false)
+            // Если файла настроек не обнаружено (если метод возвращает false), то приложение откроектся в центре экрана
+            if (Model.RestoreSettings(out MainWindowState State))
             {
-                SettingsFile_Exists = false;
-            }
+                // Предполагается, что все мониторы одинаковой высоты и расположены горизонтально
+                double GlobalWidth = 0;
 
-            MainWindowState State = SettingsManager.Read(FilePath_Settings);
+                foreach (var screen in MainWindow.Instance.Screens.All)
+                {
+                    GlobalWidth += screen.Bounds.Size.Width;
+                }
 
-            // Если файла настроек не обнаружено, то приложение откроектся в центре экрана
-            if (SettingsFile_Exists)
-            {
-                double GlobalWidth = MainWindow.Instance.LastScreen.Bounds.BottomRight.X;
                 double GlobalHeight = MainWindow.Instance.LastScreen.Bounds.BottomRight.Y;
 
                 // Если сохраненная позиция окна находится вне рамок доступной рабочей области,
@@ -85,7 +68,7 @@ public class MainViewModel : ViewModelBase
                 }
             }
 
-            Model.RestoreContent();            
+            Model.RestoreContent();
         }
 
         catch (Exception error)
@@ -108,13 +91,11 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
-            MainWindowState State = new MainWindowState()
+            Model.SaveSettings(new MainWindowState()
             {
                 Left = MainWindow.Instance.Position.X,
                 Top = MainWindow.Instance.Position.Y
-            };
-
-            SettingsManager.Save(FilePath_Settings, State);
+            });
 
             Model.SaveContent();
         }

@@ -6,7 +6,7 @@ namespace Notes.Views
 {
     public partial class MainView : UserControl
     {
-        public event EventHandler<EventArgs> AnyTextBox_LostFocus;
+        public event EventHandler<EventArgs>? AnyTextBox_LostFocus;
 
         public static MainView Instance { get; private set; }
 

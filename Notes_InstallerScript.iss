@@ -5,9 +5,9 @@
 
 
 ; Менять версии тут
-#define MyAppVersion "1.1.0 beta"
+#define MyAppVersion "1.1.0"
 #define InstallDirectory "D:\XSoft\Notes_1.1.0"
-#define OutputFileName "Notes_1.1.0_beta_installer"
+#define OutputFileName "Notes_1.1.0_installer"
 
 
 #define MyAppPublisher "XSoft"
@@ -20,11 +20,12 @@
 #define PublishDirectory 'Notes.Desktop\bin\Release\net7.0\publish\win-x64'
 
 #define OutputDirectory 'D:\0_Compiled_Installers\Notes'
+#define IconDirectory "Notes\Assets\MainLogo.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{F9F34B14-F5E4-413E-AADF-BA9EDDE7BACE}
+AppId={{FE2F3533-4DE8-4A35-BF94-17C311927990}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -43,6 +44,7 @@ PrivilegesRequiredOverridesAllowed=dialog
 
 OutputDir={#OutputDirectory}\{#MyAppVersion}
 OutputBaseFilename={#OutputFileName}
+SetupIconFile={#IconDirectory}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

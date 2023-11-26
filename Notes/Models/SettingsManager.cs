@@ -32,7 +32,10 @@ namespace Notes.Models
     {
         public static void Save<T>(string FilePath, T Data)
         {
-            File.WriteAllText(FilePath, string.Empty);
+            if (File.Exists(FilePath))
+            {
+                File.WriteAllText(FilePath, string.Empty);
+            }            
 
             JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
             {

@@ -9,8 +9,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Company>XSoft</Company>
     <Authors>Abdulkayumov Andrey</Authors>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
+    <ApplicationIcon>MainLogo.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="MainLogo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />

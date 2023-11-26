@@ -14,9 +14,7 @@ public partial class MainWindow : Window
 
     public readonly Screen LastScreen;
 
-    public event EventHandler<EventArgs> Button_AddCommand;
-    public event EventHandler<EventArgs> Window_Opened;
-    public event EventHandler<EventArgs> Window_Closing;
+    public event EventHandler<EventArgs>? Button_AddCommand;
     
 
     public MainWindow()

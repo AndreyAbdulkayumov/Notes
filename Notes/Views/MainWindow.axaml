@@ -7,11 +7,12 @@
 		x:Name="SourceWindow"
         mc:Ignorable="d"
         x:Class="Notes.Views.MainWindow"
+		Icon="/Assets/MainLogo.ico"
         Title="Заметки"
 		SizeToContent="WidthAndHeight"
 		CanResize="False"
 		WindowStartupLocation="CenterScreen"
-		ShowInTaskbar="True"
+		ShowInTaskbar="False"
 		MinWidth="160"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaChromeHints="NoChrome">

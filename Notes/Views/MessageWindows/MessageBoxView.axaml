@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         x:Class="Notes.Views.MessageWindows.MessageBoxView"
 		Height="200" Width="300"
-		WindowStartupLocation="CenterScreen"
+		WindowStartupLocation="CenterOwner"
 		ShowInTaskbar="False"
 		SizeToContent="WidthAndHeight"
 		ExtendClientAreaToDecorationsHint="True"
@@ -30,6 +30,7 @@
 		<SolidColorBrush x:Key="OK_Button_BorderBrush" Color="Black"/>
 		
 		<SolidColorBrush x:Key="Text_Color" Color="Black"/>
+		<SolidColorBrush x:Key="Text_SelectionColor" Color="#FFD0D0D0"/>
 		
 	</Window.Resources>
 	
@@ -87,11 +88,25 @@
 				
 			</Grid>
 			
-			<TextBlock x:Name="TextBlock_Message" Grid.Row="1"
-					   Foreground="{StaticResource Text_Color}"
-					   TextWrapping="Wrap"
-					   Margin="30"
-					   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<TextBox x:Name="TextBlock_Message" Grid.Row="1"
+					 Foreground="{StaticResource Text_Color}"
+					 Background="{StaticResource Background_Main}"
+				     SelectionBrush="{StaticResource Text_SelectionColor}"
+					 TextWrapping="Wrap"
+					 Margin="30"
+					 IsReadOnly="True"
+					 HorizontalAlignment="Center" VerticalAlignment="Center">
+				
+				<TextBox.Resources>
+					
+					<SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White"/>
+					
+					<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White"/>
+					<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="White"/>
+
+				</TextBox.Resources>
+				
+			</TextBox>
 
 			<Border Grid.Row="2" Background="{StaticResource Background_BottomTools}">
 
@@ -114,7 +129,7 @@
 								<Button Content="{Binding Content}"
 										BorderThickness="1"
 										CornerRadius="0"
-										Width="70" Height="30"
+										Width="60" Height="30"
 										Margin="10,0,10,0"
 										HorizontalContentAlignment="Center"
 										HorizontalAlignment="Right" VerticalAlignment="Center"
