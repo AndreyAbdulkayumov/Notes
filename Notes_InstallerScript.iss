@@ -5,9 +5,13 @@
 
 
 ; Менять версии тут
-#define MyAppVersion "1.1.0"
-#define InstallDirectory "D:\XSoft\Notes_1.1.0"
-#define OutputFileName "Notes_1.1.0_installer"
+#define MyAppVersion "1.1.1"
+
+; Директория установки приложения по умолчанию
+#define InstallDirectory "C:\Program Files\XSoft\Notes"
+
+; Имя файла установщика
+#define OutputFileName "Notes_" + MyAppVersion + "_installer"
 
 
 #define MyAppPublisher "XSoft"
