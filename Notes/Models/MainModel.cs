@@ -74,12 +74,17 @@ namespace Notes.Models
             }
         }
 
-        
+        // Имя корневой папки (имя разработчика ПО)
+        private const string CommonFolderName = "XSoft";
 
+        // Имя папки приложения
+        private const string ProgramFolderName = "Notes";
+
+        // Имена служебных файлов
         private const string FileName_Settings = "Settings.json";
         private const string FileName_SavedContent = "SavedContent.json";
 
-        private readonly string DirectoryNameInDocuments = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + "Notes";
+        private readonly string DirectoryNameInDocuments;
 
         private readonly string FilePath_Settings;
 
@@ -90,8 +95,10 @@ namespace Notes.Models
 
         public MainModel()
         {
-            FilePath_Settings = DirectoryNameInDocuments + "\\" + FileName_Settings;
-            FilePath_SavedContent = DirectoryNameInDocuments + "\\" + FileName_SavedContent;
+            DirectoryNameInDocuments = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), CommonFolderName, ProgramFolderName);
+
+            FilePath_Settings = Path.Combine(DirectoryNameInDocuments, FileName_Settings);
+            FilePath_SavedContent = Path.Combine(DirectoryNameInDocuments, FileName_SavedContent);
         }
 
         public void AddBlock()
