@@ -7,9 +7,9 @@
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Company>XSoft</Company>
+    <Company>Абдулкаюмов Андрей</Company>
     <Authors>Abdulkayumov Andrey</Authors>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <ApplicationIcon>MainLogo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.7" />
   </ItemGroup>
 
   <ItemGroup>

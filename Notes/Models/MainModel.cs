@@ -74,9 +74,6 @@ namespace Notes.Models
             }
         }
 
-        // Имя корневой папки (имя разработчика ПО)
-        private const string CommonFolderName = "XSoft";
-
         // Имя папки приложения
         private const string ProgramFolderName = "Notes";
 
@@ -95,7 +92,7 @@ namespace Notes.Models
 
         public MainModel()
         {
-            DirectoryNameInDocuments = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), CommonFolderName, ProgramFolderName);
+            DirectoryNameInDocuments = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ProgramFolderName);
 
             FilePath_Settings = Path.Combine(DirectoryNameInDocuments, FileName_Settings);
             FilePath_SavedContent = Path.Combine(DirectoryNameInDocuments, FileName_SavedContent);

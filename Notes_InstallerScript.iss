@@ -5,23 +5,25 @@
 
 
 ; Менять версии тут
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.1.2"
 
 ; Директория установки приложения по умолчанию
-#define InstallDirectory "C:\Program Files\XSoft\Notes"
+#define InstallDirectory "C:\Program Files\Notes"
 
 ; Имя файла установщика
 #define OutputFileName "Notes_" + MyAppVersion + "_installer"
 
+; Описание файла установщика
+#define FileDescription "Notes"
 
-#define MyAppPublisher "XSoft"
+#define MyAppPublisher "Абдулкаюмов Андрей"
 #define MyAppExeName "Notes.Desktop.exe"
 #define MyAppAssocName "Notes.Desktop File"
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
 
 ; Относительный путь
-#define PublishDirectory 'Notes.Desktop\bin\Release\net7.0\publish\win-x64'
+#define PublishDirectory 'Notes.Desktop\bin\Release\net8.0\publish\win-x64'
 
 #define OutputDirectory 'D:\0_Compiled_Installers\Notes'
 #define IconDirectory "Notes\Assets\MainLogo.ico"
@@ -32,7 +34,8 @@
 AppId={{FE2F3533-4DE8-4A35-BF94-17C311927990}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
+VersionInfoVersion={#MyAppVersion}
+VersionInfoDescription={#FileDescription}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={#InstallDirectory}
 ChangesAssociations=yes
@@ -45,6 +48,9 @@ AllowNoIcons=yes
 ; 1. Для всех как админ
 ; 2. Только для текущего пользователя
 PrivilegesRequiredOverridesAllowed=dialog
+
+; Добавляем ярлык приложения в Панели управления
+UninstallDisplayIcon={app}\{#MyAppExeName}
 
 OutputDir={#OutputDirectory}\{#MyAppVersion}
 OutputBaseFilename={#OutputFileName}
@@ -81,7 +87,7 @@ Root: HKLM; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{autodesktop}\{#MyAppName} {#MyAppVersion}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
